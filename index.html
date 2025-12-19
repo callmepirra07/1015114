@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Joan - A Final Message</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* LOADING SCREEN STYLES */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 40px;
+        }
+        
+        .heart-loader {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        .heart-loader:before,
+        .heart-loader:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 160px;
+            background: #ff6b8b;
+            border-radius: 100px 100px 0 0;
+        }
+        
+        .heart-loader:before {
+            left: 100px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        
+        .heart-loader:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        .loading-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ff6b8b;
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .loading-subtext {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: #a9a9a9;
+            text-align: center;
+            max-width: 300px;
+            margin-bottom: 40px;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #ff6b8b, #4dabf7);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-percentage {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            color: #4dabf7;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        
+        .loading-message {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: #a9a9a9;
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        .pulse-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4dabf7;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        .pulse-dot:nth-child(1) { animation-delay: 0s; }
+        .pulse-dot:nth-child(2) { animation-delay: 0.2s; }
+        .pulse-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+        
+        /* FLOATING ELEMENTS IN LOADER */
+        .loader-floating-heart {
+            position: absolute;
+            color: rgba(255, 107, 139, 0.3);
+            font-size: 1.5rem;
+            animation: floatAround 15s linear infinite;
+        }
+        
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -50px) rotate(90deg); }
+            50% { transform: translate(0, -100px) rotate(180deg); }
+            75% { transform: translate(-100px, -50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #f5f5f5;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            opacity: 0;
+            animation: fadeInBody 1s ease 0.5s forwards;
+        }
+        
+        @keyframes fadeInBody {
+            to { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Section */
+        header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .title-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: #ff6b8b;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 107, 139, 0.7);
+            animation: titleGlow 3s infinite alternate, floatTitle 6s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { 
+                text-shadow: 0 0 15px rgba(255, 107, 139, 0.7), 0 0 30px rgba(255, 107, 139, 0.4); 
+            }
+            50% { 
+                text-shadow: 0 0 25px rgba(255, 107, 139, 0.9), 0 0 45px rgba(255, 107, 139, 0.6), 0 0 60px rgba(255, 107, 139, 0.3); 
+            }
+        }
+        
+        @keyframes floatTitle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(0.5deg); }
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #a9a9a9;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+            animation: fadeInUp 1.5s ease-out 0.5s both;
+            opacity: 0;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+            animation: floatCircle 25s infinite linear;
+            opacity: 0.1;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff6b8b 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #4dabf7 0%, transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 5s;
+        }
+        
+        @keyframes floatCircle {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, 30px) rotate(90deg); }
+            50% { transform: translate(0, 60px) rotate(180deg); }
+            75% { transform: translate(-30px, 30px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        /* Message Sections */
+        .message-section {
+            margin: 100px auto;
+            padding: 50px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(60px) scale(0.95);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .message-section.visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .message-header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #ff6b8b, #4dabf7);
+            transition: width 1.5s ease;
+        }
+        
+        .message-section.visible .message-header::after {
+            width: 150px;
+        }
+        
+        .message-header i {
+            font-size: 2.5rem;
+            color: #4dabf7;
+            margin-right: 20px;
+            animation: iconPulse 2s infinite alternate;
+        }
+        
+        @keyframes iconPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .message-header h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #4dabf7, #ff6b8b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .message-content {
+            font-size: 1.4rem;
+            line-height: 1.9;
+            padding: 0 10px;
+        }
+        
+        .message-content p {
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.8s ease;
+        }
+        
+        .message-section.visible .message-content p {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .message-section.visible .message-content p:nth-child(1) {
+            transition-delay: 0.3s;
+        }
+        
+        .message-section.visible .message-content p:nth-child(2) {
+            transition-delay: 0.6s;
+        }
+        
+        .message-section.visible .message-content p:nth-child(3) {
+            transition-delay: 0.9s;
+        }
+        
+        .highlight {
+            color: #ffd166;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ffd166;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+        
+        .highlight:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Images Section */
+        .images-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            margin: 100px 0;
+        }
+        
+        .image-card {
+            width: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            transform: translateY(60px) rotateY(20deg);
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .image-card.visible {
+            transform: translateY(0) rotateY(0deg);
+            opacity: 1;
+        }
+        
+        .image-card:nth-child(1).visible {
+            transition-delay: 0.2s;
+        }
+        
+        .image-card:nth-child(2).visible {
+            transition-delay: 0.5s;
+        }
+        
+        .image-frame {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .image-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 107, 139, 0.1), rgba(77, 171, 247, 0.1));
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .image-card:hover .image-frame::before {
+            opacity: 1;
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .image-card:hover img {
+            transform: scale(1.15) rotate(1deg);
+        }
+        
+        .image-caption {
+            padding: 25px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-caption::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #ff6b8b, #4dabf7);
+            transition: left 0.8s ease;
+        }
+        
+        .image-card:hover .image-caption::before {
+            left: 100%;
+        }
+        
+        .image-caption h3 {
+            color: #4dabf7;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .image-caption p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        /* Final Section */
+        .final-section {
+            text-align: center;
+            padding: 80px 20px;
+            margin: 100px auto;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 215, 102, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .final-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.2rem;
+            color: #ffd166;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(40px) scale(0.9);
+            animation: messageReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes messageReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .signature {
+            font-size: 1.8rem;
+            color: #a9a9a9;
+            margin-top: 60px;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .signature p {
+            margin-bottom: 15px;
+        }
+        
+        .closing-note {
+            margin-top: 40px;
+            font-size: 1.1rem;
+            color: #777;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 4s forwards;
+        }
+        
+        /* Snowflakes for Christmas theme */
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            z-index: -1;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        /* Floating Elements */
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 107, 139, 0.7);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #ff6b8b, #4dabf7);
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 4rem;
+            }
+            
+            .message-section {
+                padding: 40px 30px;
+                margin: 80px auto;
+            }
+            
+            .message-header h2 {
+                font-size: 2.2rem;
+            }
+            
+            .message-content {
+                font-size: 1.2rem;
+            }
+            
+            .final-message {
+                font-size: 2.8rem;
+            }
+            
+            .image-card {
+                width: 100%;
+                max-width: 450px;
+            }
+            
+            .loader-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .heart-loader:before,
+            .heart-loader:after {
+                width: 75px;
+                height: 120px;
+            }
+            
+            .heart-loader:before {
+                left: 75px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .message-section {
+                padding: 30px 20px;
+                margin: 60px auto;
+            }
+            
+            .message-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .message-content {
+                font-size: 1.1rem;
+            }
+            
+            .final-message {
+                font-size: 2.2rem;
+            }
+            
+            .signature {
+                font-size: 1.5rem;
+            }
+            
+            .images-container {
+                gap: 30px;
+            }
+            
+            .loading-text {
+                font-size: 2rem;
+            }
+            
+            .progress-bar {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader-container">
+            <div class="heart-loader"></div>
+        </div>
+        
+        <div class="loading-text">Loading My Final Message</div>
+        <div class="loading-subtext">Preparing something special for Joan...</div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="loading-percentage" id="loadingPercentage">0%</div>
+        
+        <div class="loading-message" id="loadingMessage">Loading heartfelt animations...</div>
+        
+        <div class="pulse-dots">
+            <div class="pulse-dot"></div>
+            <div class="pulse-dot"></div>
+            <div class="pulse-dot"></div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="decorative-circle circle-1"></div>
+            <div class="decorative-circle circle-2"></div>
+            
+            <div class="title-container">
+                <h1>To Joan</h1>
+            </div>
+            <p class="subtitle">A final message, with all my heart</p>
+        </header>
+        
+        <!-- First Message Section -->
+        <section class="message-section" id="section1">
+            <div class="message-header">
+                <i class="fas fa-comment-dots"></i>
+                <h2>I Noticed...</h2>
+            </div>
+            <div class="message-content">
+                <p>I noticed you blocked me, and I'm guessing things reached a point where you felt it was necessary. I want you to know that I respect your decision completely. It's okay - I'll give you space and let it go if you've decided to do so.</p>
+                <p>All in all, it is your choice. I understand, and I accept it.</p>
+                <p>You forgot to block this then... but it's fine, I'll respect your space from here on.</p>
+            </div>
+        </section>
+        
+        <!-- Images Section -->
+        <div class="images-container">
+            <div class="image-card" id="image1">
+                <div class="image-frame">
+                    <img src="./images/blocked.png" alt="The Block Symbol">
+                </div>
+                <div class="image-caption">
+                    <h3>Understanding</h3>
+                    <p>I never knew it would reach this point, but I respect your boundaries.</p>
+                </div>
+            </div>
+            
+            <div class="image-card" id="image2">
+                <div class="image-frame">
+                    <img src="./images/MerryChristmas.jpg" alt="Merry Christmas">
+                </div>
+                <div class="image-caption">
+                    <h3>Season's Greetings</h3>
+                    <p>A heartfelt wish for the holidays, in advance.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Second Message Section -->
+        <section class="message-section" id="section2">
+            <div class="message-header">
+                <i class="fas fa-heart"></i>
+                <h2>My Heartfelt Words</h2>
+            </div>
+            <div class="message-content">
+                <p>Joan, I never knew it would reach a point where you'd block me. <span class="highlight">But it's fine, and I understand.</span> Sometimes paths diverge, and people need space to breathe, to heal, to find themselves again.</p>
+                <p>I created this website as my last goodbye - a place where I could express my feelings without intrusion, without pressure. Just a simple, heartfelt message from me to you.</p>
+                <p>I wish you nothing but happiness, joy, and peace in your life. May you find everything you're looking for and more.</p>
+            </div>
+        </section>
+        
+        <!-- Final Section -->
+        <section class="final-section">
+            <p class="final-message">Merry Christmas in advance, Joan</p>
+            <p class="final-message" style="animation-delay: 0.8s">May your holidays be filled with warmth and light</p>
+            <p class="final-message" style="animation-delay: 1.6s">And may the new year bring you joy and peace</p>
+            
+            <div class="signature">
+                <p>With all my heart,</p>
+                <p>Your friend</p>
+            </div>
+            
+            <div class="closing-note">
+                <p>This is my final message to you. I'll respect your space from now on.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Loading Screen Simulation
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressFill = document.getElementById('progressFill');
+            const loadingPercentage = document.getElementById('loadingPercentage');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // Create floating hearts in loading screen
+            createLoaderHearts();
+            
+            // Loading messages to display
+            const loadingMessages = [
+                "Loading heartfelt animations...",
+                "Preparing my final words...",
+                "Setting up Christmas wishes...",
+                "Almost ready...",
+                "Loading complete. Showing my message..."
+            ];
+            
+            let progress = 0;
+            let messageIndex = 0;
+            
+            // Simulate loading progress
+            const loadingInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                
+                if (progress > 100) {
+                    progress = 100;
+                }
+                
+                progressFill.style.width = `${progress}%`;
+                loadingPercentage.textContent = `${Math.floor(progress)}%`;
+                
+                // Update loading message at certain intervals
+                if (progress > 20 && messageIndex === 0) {
+                    loadingMessage.textContent = loadingMessages[1];
+                    messageIndex = 1;
+                } else if (progress > 40 && messageIndex === 1) {
+                    loadingMessage.textContent = loadingMessages[2];
+                    messageIndex = 2;
+                } else if (progress > 60 && messageIndex === 2) {
+                    loadingMessage.textContent = loadingMessages[3];
+                    messageIndex = 3;
+                } else if (progress > 90 && messageIndex === 3) {
+                    loadingMessage.textContent = loadingMessages[4];
+                    messageIndex = 4;
+                }
+                
+                // When loading is complete
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    
+                    // Wait a moment then hide loading screen
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        
+                        // Start the main animations after loading screen is hidden
+                        setTimeout(() => {
+                            startMainAnimations();
+                        }, 500);
+                    }, 800);
+                }
+            }, 200);
+            
+            // Start main content animations
+            function startMainAnimations() {
+                // Create floating hearts
+                createFloatingHearts();
+                
+                // Create snowflakes
+                createSnowflakes();
+                
+                // Animate subtitle
+                document.querySelector('.subtitle').style.animation = 'fadeInUp 1.5s ease-out 0.5s both';
+                
+                // Observe sections for scroll animations
+                const observerOptions = {
+                    threshold: 0.15,
+                    rootMargin: '0px 0px -100px 0px'
+                };
+                
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+                
+                // Observe all sections and images
+                const sections = document.querySelectorAll('.message-section, .image-card');
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+                
+                // Text animation for final message
+                const finalMessages = document.querySelectorAll('.final-message');
+                finalMessages.forEach((message, index) => {
+                    message.style.animationDelay = `${index * 0.8}s`;
+                });
+                
+                // Add hover effects for message sections
+                document.querySelectorAll('.message-section').forEach(section => {
+                    section.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-15px) scale(1.02)';
+                        this.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.7)';
+                        this.style.transition = 'all 0.4s ease';
+                    });
+                    
+                    section.addEventListener('mouseleave', function() {
+                        if (this.classList.contains('visible')) {
+                            this.style.transform = 'translateY(0) scale(1)';
+                        }
+                        this.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.5)';
+                    });
+                });
+                
+                // Add click effect to images
+                document.querySelectorAll('.image-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            if (this.classList.contains('visible')) {
+                                this.style.transform = 'scale(1)';
+                            }
+                        }, 200);
+                    });
+                });
+            }
+        });
+        
+        function createLoaderHearts() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            
+            for (let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('loader-floating-heart');
+                heart.innerHTML = '❤';
+                
+                // Random properties
+                const size = Math.random() * 20 + 10;
+                const animationDuration = Math.random() * 20 + 10;
+                const animationDelay = Math.random() * 10;
+                const opacity = Math.random() * 0.2 + 0.1;
+                
+                // Apply styles
+                heart.style.fontSize = `${size}px`;
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.top = `${Math.random() * 100}%`;
+                heart.style.opacity = opacity;
+                heart.style.animationDuration = `${animationDuration}s`;
+                heart.style.animationDelay = `${animationDelay}s`;
+                heart.style.color = getRandomColor();
+                
+                // Add to loading screen
+                loadingScreen.appendChild(heart);
+            }
+        }
+        
+        function createFloatingHearts() {
+            const container = document.querySelector('body');
+            const heartCount = 25;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = getRandomHeart();
+                
+                // Random properties
+                const size = Math.random() * 30 + 15;
+                const startLeft = Math.random() * 100;
+                const animationDuration = Math.random() * 25 + 15;
+                const animationDelay = Math.random() * 10;
+                const opacity = Math.random() * 0.4 + 0.1;
+                
+                // Apply styles
+                heart.style.fontSize = `${size}px`;
+                heart.style.left = `${startLeft}%`;
+                heart.style.top = `${Math.random() * 100}%`;
+                heart.style.opacity = opacity;
+                heart.style.animation = `floatHeart ${animationDuration}s ease-in-out ${animationDelay}s infinite`;
+                heart.style.color = getRandomColor();
+                
+                // Add to container
+                container.appendChild(heart);
+            }
+            
+            // Add CSS for floating animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes floatHeart {
+                    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+                    25% { transform: translate(${Math.random()*60-30}px, -30px) rotate(90deg) scale(1.1); }
+                    50% { transform: translate(${Math.random()*40-20}px, -60px) rotate(180deg) scale(1); }
+                    75% { transform: translate(${Math.random()*60-30}px, -30px) rotate(270deg) scale(0.9); }
+                    100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        function createSnowflakes() {
+            const container = document.querySelector('body');
+            const snowflakeCount = 40;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+                
+                // Random properties
+                const size = Math.random() * 20 + 10;
+                const startLeft = Math.random() * 100;
+                const animationDuration = Math.random() * 20 + 10;
+                const animationDelay = Math.random() * 20;
+                const opacity = Math.random() * 0.5 + 0.3;
+                
+                // Apply styles
+                snowflake.style.fontSize = `${size}px`;
+                snowflake.style.left = `${startLeft}%`;
+                snowflake.style.top = `-50px`;
+                snowflake.style.opacity = opacity;
+                snowflake.style.animationDuration = `${animationDuration}s`;
+                snowflake.style.animationDelay = `${animationDelay}s`;
+                
+                // Add to container
+                container.appendChild(snowflake);
+            }
+        }
+        
+        function getRandomHeart() {
+            const hearts = ['❤', '💖', '💕', '💗', '💓', '💞', '💘'];
+            return hearts[Math.floor(Math.random() * hearts.length)];
+        }
+        
+        function getRandomColor() {
+            const colors = [
+                'rgba(255, 107, 139, 0.7)',
+                'rgba(77, 171, 247, 0.7)',
+                'rgba(255, 209, 102, 0.7)',
+                'rgba(123, 237, 159, 0.7)',
+                'rgba(200, 150, 255, 0.7)'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Add parallax effect on scroll
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.decorative-circle, .floating-heart');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.classList.contains('decorative-circle') ? 0.5 : 0.2;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px) ${element.style.transform.split(' ').slice(1).join(' ')}`;
+            });
+        });
+    </script>
+</body>
+</html>
