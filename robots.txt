@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /images/
+Sitemap: https://callmepirra07.github.io/1015114/sitemap.xml
